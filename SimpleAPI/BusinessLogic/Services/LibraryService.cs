@@ -149,7 +149,7 @@ namespace SimpleAPI.BusinessLogic.Services
 
                 if (library == null || !library.IsActive)
                 {
-                    return new Response<LibraryVM> { Message = MsgUtils.NOT_FOUND, Total = 0 ,HttpStatus = MsgUtils.HTTP_500};
+                    return new Response<LibraryVM> { Message = MsgUtils.NOT_FOUND, Total = 0 ,HttpStatus = MsgUtils.HTTP_404 };
                 }
                 libraryVM = library.CopyTOModel();
 
@@ -195,7 +195,7 @@ namespace SimpleAPI.BusinessLogic.Services
 
                 if (library == null || !library.IsActive)
                 {
-                    return new Response<LibraryVM> { Message = MsgUtils.NOT_FOUND, Total = 0, HttpStatus = MsgUtils.HTTP_400 };
+                    return new Response<LibraryVM> { Message = MsgUtils.NOT_FOUND, Total = 0, HttpStatus = MsgUtils.HTTP_404 };
                 }
 
                 library.CopyTOEntity(model);
@@ -230,6 +230,50 @@ namespace SimpleAPI.BusinessLogic.Services
 
             return response;
 
+        }
+
+        /// <summary>
+        ///     service to delete a library
+        /// </summary>
+        /// <param name="libraryId"></param>
+        /// <returns></returns>
+        public async Task<Response<int>> DeleteLibraryByIdAsync(int libraryId)
+        {
+            string message = MsgUtils.OK;
+            try
+            {
+                Library library = new();
+                library = await _libraryDao.GetByIdAsync(libraryId);
+
+                if (library == null)
+                {
+                    return new Response<int> { Message = MsgUtils.NOT_FOUND, Total = 0, HttpStatus = MsgUtils.HTTP_404};
+                }
+
+                library.BaseUpdate("1", false);
+                await _libraryDao.UpdateAsync(library);
+            }
+            catch (Exception e)
+            {
+                message = MsgUtils.INTERNAL_SERVER_ERROR;
+                if (e.InnerException != null)
+                {
+                    message = message + ' ' + e.InnerException.Message;
+                }
+
+                return new Response<int> { Message = message, Total = 0, HttpStatus = MsgUtils.HTTP_500 };
+            }
+
+            var response = new Response<int>
+            {
+                Message = message,
+                Total = 1,
+                Success = true,
+                HttpStatus = MsgUtils.HTTP_201
+
+            };
+
+            return response;
         }
 
 

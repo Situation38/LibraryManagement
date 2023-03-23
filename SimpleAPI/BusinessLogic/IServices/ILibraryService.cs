@@ -10,5 +10,9 @@ namespace SimpleAPI.BusinessLogic.IServices
         public Task<Response<List<LibraryVM>>> GetAllLibraryAsync();
 
         public Task<Response<LibraryVM>> GetLibraryByIdAsync(int LibraryId);
+
+        public Task<Response<LibraryVM>> UpdateLibraryAsync(LibraryBM model, int Id);
+
+        public Task<Response<int>> DeleteLibraryByIdAsync(int libraryId);
     }
 }
