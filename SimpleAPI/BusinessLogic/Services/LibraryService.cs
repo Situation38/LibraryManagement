@@ -134,7 +134,7 @@ namespace SimpleAPI.BusinessLogic.Services
         }
 
         /// <summary>
-        ///     sercice  for get a specific Library
+        ///     service  for get a specific Library
         /// </summary>
         /// <param name="LibraryId"></param>
         /// <returns></returns>
@@ -176,6 +176,63 @@ namespace SimpleAPI.BusinessLogic.Services
 
             return response;
         }
+
+
+        /// <summary>
+        ///       service  for Update a specific  Library
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public async Task<Response<LibraryVM>> UpdateLibraryAsync(LibraryBM model, int Id)
+        {
+            string message = MsgUtils.OK;
+            LibraryVM? libraryVM = null;
+            try
+            {
+                Library library = new();
+                library = await _libraryDao.GetByIdAsync(Id);
+
+                if (library == null || !library.IsActive)
+                {
+                    return new Response<LibraryVM> { Message = MsgUtils.NOT_FOUND, Total = 0, HttpStatus = MsgUtils.HTTP_400 };
+                }
+
+                library.CopyTOEntity(model);
+                library.BaseUpdate("", true);
+
+                await _libraryDao.UpdateAsync(library);
+                if (library != null)
+                {
+                    libraryVM = library.CopyTOModel();
+                }
+            }
+            catch (Exception e)
+            {
+                message = MsgUtils.INTERNAL_SERVER_ERROR;
+                if (e.InnerException != null)
+                {
+                    message = message + ' ' + e.InnerException.Message;
+                }
+
+                return new Response<LibraryVM> { Message = message, Total = 0, HttpStatus = MsgUtils.HTTP_500};
+            }
+
+            var response = new Response<LibraryVM>
+            {
+                Message = message,
+                Total = 1,
+                Data = libraryVM,
+                HttpStatus = MsgUtils.HTTP_200,
+                Success = true
+               
+            };
+
+            return response;
+
+        }
+
+
 
     }
 }
