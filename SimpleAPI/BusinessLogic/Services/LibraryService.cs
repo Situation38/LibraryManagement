@@ -4,6 +4,7 @@ using SimpleAPI.DAL.Entities;
 using SimpleAPI.Dtos;
 using SimpleAPI.Dtos.VBM;
 using SimpleAPI.Dtos.VM;
+using SimpleAPI.Helpers;
 
 namespace SimpleAPI.BusinessLogic.Services
 {
@@ -21,7 +22,7 @@ namespace SimpleAPI.BusinessLogic.Services
 
             Library library = new();
             LibraryVM libraryVM = new();
-            string message = "OK";
+            string message = MsgUtils.OK;
 
             try
             {
@@ -29,15 +30,19 @@ namespace SimpleAPI.BusinessLogic.Services
                 
                 library = library.CopyTOEntity(model);
                 library.BaseCreate("",true);
-              // _libraryDao.InsertAsync(library);
-                
-               
+                await _libraryDao.InsertAsync(library);
+
+                if (library != null)
+                {
+                    libraryVM = library.CopyTOModel();
+                }
+
             }
 
 
             catch (Exception e)
             {
-                message = "INTERNAL_SERVER_ERROR";
+                message =MsgUtils.INTERNAL_SERVER_ERROR;
                 if (e.InnerException != null)
                 {
                     message = message + ' ' + e.InnerException.Message;
