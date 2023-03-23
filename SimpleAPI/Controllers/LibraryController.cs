@@ -71,6 +71,32 @@ namespace SimpleAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        ///  controller  for get a specific Library service
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("Library/{id}")]
+        public async Task<ActionResult> GetLibraryByIdAsync(int id)
+        {
+            var result = await _libraryService.GetLibraryByIdAsync(id);
 
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            if (result.Message.Contains(MsgUtils.NOT_FOUND))
+            {
+                return NotFound();
+            }
+
+            if (result.Message.Contains(MsgUtils.INTERNAL_SERVER_ERROR))
+            {
+                return StatusCode(500, result.Message);
+            }
+
+            return Ok(result);
+        }
     }
 }

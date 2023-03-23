@@ -8,5 +8,7 @@ namespace SimpleAPI.BusinessLogic.IServices
     {
         public Task<Response<LibraryVM>> CreateLibraryAsync(LibraryBM model);
         public Task<Response<List<LibraryVM>>> GetAllLibraryAsync();
+
+        public Task<Response<LibraryVM>> GetLibraryByIdAsync(int LibraryId);
     }
 }

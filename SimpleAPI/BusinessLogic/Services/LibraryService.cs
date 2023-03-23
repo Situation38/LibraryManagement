@@ -53,7 +53,7 @@ namespace SimpleAPI.BusinessLogic.Services
                     message = message + ' ' + e.InnerException.Message;
                 }
 
-                return new Response<LibraryVM> { Message = message, Total = 0 };
+                return new Response<LibraryVM> { Message = message, Total = 0, HttpStatus = MsgUtils.HTTP_500 };
             }
 
             var response = new Response<LibraryVM>
@@ -61,11 +61,19 @@ namespace SimpleAPI.BusinessLogic.Services
                 Message = message,
                 Total = 1,
                 Data = libraryVM,
+                HttpStatus = MsgUtils.HTTP_200,
                 Success = true
             };
             return response;
         }
 
+
+
+        // <summary>
+        ///     Service for get libraries
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<Response<List<LibraryVM>>> GetAllLibraryAsync()
         {
             string message = MsgUtils.OK;
@@ -109,7 +117,7 @@ namespace SimpleAPI.BusinessLogic.Services
                     message = message + ' ' + e.InnerException.Message;
                 }
 
-                return new Response<List<LibraryVM>> { Message = message, Total = 0 };
+                return new Response<List<LibraryVM>> { Message = message, Total = 0, HttpStatus = MsgUtils.HTTP_500, };
             }
 
             var response = new Response<List<LibraryVM>>
@@ -117,8 +125,53 @@ namespace SimpleAPI.BusinessLogic.Services
                 Message = message,
                 Total = total,
                 Data = libraryVm,
+                HttpStatus = MsgUtils.HTTP_200,
                 Success = true
                 
+            };
+
+            return response;
+        }
+
+        /// <summary>
+        ///     sercice  for get a specific Library
+        /// </summary>
+        /// <param name="LibraryId"></param>
+        /// <returns></returns>
+        public async Task<Response<LibraryVM>> GetLibraryByIdAsync(int LibraryId)
+        {
+            string message = MsgUtils.OK;
+            LibraryVM libraryVM = new();
+
+            try
+            {
+                var library = await _libraryDao.GetByIdAsync(LibraryId);
+
+                if (library == null || !library.IsActive)
+                {
+                    return new Response<LibraryVM> { Message = MsgUtils.NOT_FOUND, Total = 0 ,HttpStatus = MsgUtils.HTTP_500};
+                }
+                libraryVM = library.CopyTOModel();
+
+            }
+            catch (Exception e)
+            {
+                message = MsgUtils.INTERNAL_SERVER_ERROR;
+                if (e.InnerException != null)
+                {
+                    message = message + ' ' + e.InnerException.Message;
+                }
+
+                return new Response<LibraryVM> { Message = message, Total = 0 , HttpStatus = MsgUtils.HTTP_500 };
+            }
+
+            var response = new Response<LibraryVM>
+            {
+                Message = message,
+                Total = 1,
+                Data = libraryVM,
+                HttpStatus = MsgUtils.HTTP_200,
+                Success = true
             };
 
             return response;
