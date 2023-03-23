@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using SimpleAPI.ConfigurationsDI;
 using SimpleAPI.DAL.Context;
 
@@ -15,7 +16,15 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 
+// Config swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "LIBRARY_MANAGMENT_API", Version = "v1", Description = "Just for a simple ASP .Net Core WebAPI  Boiler Plate" });
+});
+
+// Add Controllers
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
