@@ -10,17 +10,17 @@ namespace SimpleAPI.Controllers
     public class BookController : ControllerBase
     {
         /// <summary>
-        ///     Calling for use dashboard Services
+        ///     Calling for use book Services
         /// </summary>
         //private readonly IBookService _bookService;
 
         public BookController()
         {
-            //_bookService = book;
+            //_bookService = bookservice;
         }
 
         [HttpGet("")]
-        public async Task<ActionResult> GetAllBuildingLength()
+        public async Task<ActionResult> GetBooks()
         {
             return Ok();
         }

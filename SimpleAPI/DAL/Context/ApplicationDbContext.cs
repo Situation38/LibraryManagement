@@ -10,6 +10,7 @@ namespace SimpleAPI.DAL.Context
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+            //command time for db transactions
             //Database.SetCommandTimeout(10000);
         }
 
