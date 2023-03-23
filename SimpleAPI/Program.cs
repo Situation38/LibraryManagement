@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//Npgsql.EnableLegacyTimestampBehavior AppContext enable legacy behavior
+//To write DateTime with Kind Local to PostgreSQL type 'timestamp with time zone'
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 //Injections
 builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();

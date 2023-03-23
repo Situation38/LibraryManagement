@@ -12,8 +12,6 @@
         public int Total { get; set; }
         public int HttpStatus { get; set; }
         public T Data { get; set; }
-        public string Privileges { get; set; }
-
 
     }
 }

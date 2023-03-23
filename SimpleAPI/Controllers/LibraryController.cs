@@ -24,7 +24,11 @@ namespace SimpleAPI.Controllers
             _libraryService = libraryService;
         }
 
-        
+        /// <summary>
+        ///     Controller for create library
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("Library/")]
         public async Task<ActionResult> Post([FromBody] LibraryBM model)
         {
@@ -47,5 +51,26 @@ namespace SimpleAPI.Controllers
 
             return Ok(result);
         }
+
+
+        /// <summary>
+        ///     Controller for get all libraries services
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Library/")]
+        public async Task<ActionResult> Get()
+        {
+
+            var result = await _libraryService.GetAllLibraryAsync();
+
+            if (result.Message.Contains(MsgUtils.INTERNAL_SERVER_ERROR))
+            {
+                return StatusCode(500, result.Message);
+            }
+
+            return Ok(result);
+        }
+
+
     }
 }

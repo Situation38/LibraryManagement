@@ -69,6 +69,7 @@ namespace SimpleAPI.DAL.Entities
             CreatedBy = userId;
             UpdatedAt = DateTime.Now;
             UpdatedBy = userId;
+            this.IsActive = isActive;
         }
     }
 }

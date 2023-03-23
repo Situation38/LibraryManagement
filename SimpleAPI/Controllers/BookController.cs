@@ -19,8 +19,8 @@ namespace SimpleAPI.Controllers
             //_bookService = bookservice;
         }
 
-        [HttpGet("")]
-        public async Task<ActionResult> GetBooks()
+        [HttpGet("Book")]
+        public async Task<ActionResult> Books()
         {
             return Ok();
         }
